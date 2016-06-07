@@ -198,7 +198,7 @@ class Frame(wx.Frame):
                         self.resultText += "done\n"
                     else:
                         self.resultText += "failed\n"
-            time.sleep(20)
+            time.sleep(15)
 
         def stop(self):
             self.running = False
