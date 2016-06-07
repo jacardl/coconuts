@@ -1,15 +1,19 @@
 import os
+import time
+
+VER = '1.0.1'
 
 LOG_PATH = os.getcwd() + os.sep + "temp_log" + os.sep
-
+LOG_NAME = str(int(time.time())) + "_temp.log"
 
 
 PPPOE_ACCOUNT = ''
 PPPOE_PASSWORD = ''
 
-WIFI_SSID = 'COCONUTS'
+WIFI_SSID = 'coconuts_test_tools'
 WIFI_PASSWORD = '12345678'
 
+HOST = '192.168.31.1'
 WEB_USERNAME = 'admin'
 WEB_PWD = '12345678'
 WEB_KEY = 'a2ffa5c9be07488bbb04a3a47d3c5f6a'

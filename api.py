@@ -1,3 +1,4 @@
+# coding=utf8
 import httplib
 import urllib
 import hashlib
@@ -104,7 +105,7 @@ class HttpClient(object):
             loop2 = 0
             try:
                 self.httpClient = httplib.HTTPConnection(host, port, timeout=30)
-                while self.token is False and loop2 < 5:
+                while self.token is False and loop2 < 1:
                     t.sleep(5)
                     result = self.getToken(password=password)
                     loop2 += 1
@@ -118,7 +119,7 @@ class HttpClient(object):
 
         loop = 0
         ret = connectInLoop(host, password)
-        while ret is False and loop < 5:
+        while ret is False and loop < 0:
             loop += 1
             t.sleep(5)
             ret = connectInLoop(host, password)
@@ -182,7 +183,7 @@ def setGet(terminal, apipath, **kwargs):
         try:
             curTime = t.strftime('%Y.%m.%d %H:%M:%S', t.localtime())
             ret = terminal.getApi(apipath, **kwargs)
-            f = open(v.LOG_PATH + 'temp.log', 'a')
+            f = open(v.LOG_PATH + v.LOG_NAME, 'a')
             f.write(curTime + '~#API request to ' + terminal.hostname + '#')
             f.write(apipath + '?' + str(kwargs) + '\n')
             f.writelines(str(ret))
@@ -196,7 +197,7 @@ def setGet(terminal, apipath, **kwargs):
             return ret
         except Exception, e:
             curTime = t.strftime('%Y.%m.%d %H:%M:%S', t.localtime())
-            f = open(v.LOG_PATH + 'temp.log', 'a')
+            f = open(v.LOG_PATH + v.LOG_NAME, 'a')
             f.write(curTime + '~#API request to ' + terminal.hostname + ' failed#')
             f.write(apipath + '?' + str(kwargs) + '\n')
             f.write(str(e))
@@ -207,7 +208,7 @@ def setGet(terminal, apipath, **kwargs):
 
     loop = 0
     ret = setGetInLoop(terminal, apipath, **kwargs)
-    while (ret is None or ret['code'] != 0) and loop < 3:
+    while (ret is None or ret['code'] != 0) and loop < 1:
         loop += 1
         t.sleep(10)
         ret = setGetInLoop(terminal, apipath, **kwargs)
@@ -219,11 +220,11 @@ def setCheck(terminal, apipath, **kwargs):
     if not os.path.exists(v.LOG_PATH):
         os.makedirs(v.LOG_PATH)
 
-    def setCheckInLoop(terminal, logname, apipath, **kwargs):
+    def setCheckInLoop(terminal, apipath, **kwargs):
         try:
             curTime = t.strftime('%Y.%m.%d %H:%M:%S', t.localtime())
             ret = terminal.getApi(apipath, **kwargs)
-            f = open(v.LOG_PATH + 'temp.log', 'a')
+            f = open(v.LOG_PATH + v.LOG_NAME, 'a')
             f.write(curTime + '~#API request to ' + terminal.hostname + '#')
             f.write(apipath + '?' + str(kwargs) + '\n')
             f.writelines(str(ret))
@@ -244,7 +245,7 @@ def setCheck(terminal, apipath, **kwargs):
 
         except Exception, e:
             curTime = t.strftime('%Y.%m.%d %H:%M:%S', t.localtime())
-            f = open(v.LOG_PATH + 'temp.log', 'a')
+            f = open(v.LOG_PATH + v.LOG_NAME, 'a')
             f.write(curTime + '~#API request to ' + terminal.hostname + ' failed#')
             f.write(apipath + '?' + str(kwargs) + '\n')
             f.write(str(e))
@@ -254,8 +255,8 @@ def setCheck(terminal, apipath, **kwargs):
             return False
 
     loop = 0
-    ret = setCheckInLoop(terminal , apipath, **kwargs)
-    while ret is False and loop < 3:
+    ret = setCheckInLoop(terminal, apipath, **kwargs)
+    while ret is False and loop < 1:
         loop += 1
         t.sleep(10)
         ret = setCheckInLoop(terminal, apipath, **kwargs)
@@ -275,7 +276,6 @@ def setRouterNormal(terminal, **kwargs):
     password wifi 密码
     txpwr 1 穿墙
     :param terminal:
-    :param logname:
     :param kwargs:
     :return:
     """
@@ -298,14 +298,6 @@ def setRouterNormal(terminal, **kwargs):
     option.update(kwargs)
     api = '/cgi-bin/luci/;stok=token/api/misystem/set_router_normal'
     result = setCheck(terminal, api, **option)
-    if result:
-        lastTime = int(t.time())
-        curTime = int(t.time())
-        status = getWifiStatus(terminal)
-        while int(status['status'][0]['up']) != 1 or curTime - lastTime <= 20:
-            t.sleep(2)
-            status = getWifiStatus(terminal)
-            curTime = int(t.time())
     return result
 
 
@@ -333,7 +325,6 @@ def getWifiStatus(terminal):
     """
     {'status': [{'ssid': 'peanuts', 'up': 0}, {'ssid': 'peanuts_automatic_test_suite-5G', 'up': 0}], 'code': 0}
     :param terminal:
-    :param logname:
     :return:
     """
     api = '/cgi-bin/luci/;stok=token/api/xqnetwork/wifi_status'
