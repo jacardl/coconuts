@@ -127,7 +127,7 @@ class Frame(wx.Frame):
             initProcess.start()
             # while keepGoing and memMon.curr_count <= v.COUNT:
             while keepGoing and initProcess.isAlive():
-                time.sleep(1)
+                time.sleep(0.1)
                 wx.Yield()  # refresh progress
                 (keepGoing, skip) = self.dlg2.Pulse(initProcess.resultText)
 
@@ -157,7 +157,7 @@ class Frame(wx.Frame):
                 }
                 ret = api.setWan(self.terminal, **option)
                 if ret is False:
-                    self.resultText += "Config pppoe..........failed\n"
+                    self.resultText += "Config pppoe..........error\n"
                 else:
                     count = 0
                     self.resultText += "Config pppoe..."
@@ -184,7 +184,7 @@ class Frame(wx.Frame):
 
                 ret3 = api.setRouterNormal(self.terminal, **option2)
                 if ret3 is False:
-                    self.resultText += "Initialize xiaoqiang..........failed"
+                    self.resultText += "Initialize xiaoqiang..........error"
                 else:
                     self.resultText += "Initialize xiaoqiang..."
                     count = 0
