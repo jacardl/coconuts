@@ -7,7 +7,7 @@ import api
 
 class Frame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, title="COCONUTS " + v.VER, pos=(300,200),
+        wx.Frame.__init__(self, None, title="Coconuts " + v.VER, pos=(300,200),
                           style=
                           wx.CAPTION
                           | wx.CLOSE_BOX
@@ -48,7 +48,7 @@ class Frame(wx.Frame):
         self.wifiPassword = wx.TextCtrl(panel, -1, '')
         self.wifiPassword.SetValue(v.WIFI_PASSWORD)
 
-        pppoeBox = wx.StaticBox(panel, -1, 'PPPOE', size=(250,-1))
+        pppoeBox = wx.StaticBox(panel, -1, 'PPPoE', size=(250,-1))
         pppoeSizer = wx.StaticBoxSizer(pppoeBox, wx.HORIZONTAL)
 
         pppoeColSizer = wx.BoxSizer(wx.VERTICAL)
@@ -133,7 +133,7 @@ class Frame(wx.Frame):
 
 
             self.running = False
-            # self.dlg2.Destroy()
+            self.dlg2.Destroy()
             self.OkBtn.Enable(True)
 
     class InitPPPOEWifi(threading.Thread):
@@ -157,10 +157,10 @@ class Frame(wx.Frame):
                 }
                 ret = api.setWan(self.terminal, **option)
                 if ret is False:
-                    self.resultText += "Config PPPoE..........failed\n"
+                    self.resultText += "Config pppoe..........failed\n"
                 else:
                     count = 0
-                    self.resultText += "Config PPPoE"
+                    self.resultText += "Config pppoe..."
                     ret2 = api.getPPPOEStatus(self.terminal)
                     while ret2.get("status") == 1 and count < 10:
                         time.sleep(2)
@@ -186,7 +186,7 @@ class Frame(wx.Frame):
                 if ret3 is False:
                     self.resultText += "Initialize xiaoqiang..........failed"
                 else:
-                    self.resultText += "Initialize xiaoqiang"
+                    self.resultText += "Initialize xiaoqiang..."
                     count = 0
                     ret4 = api.getWifiStatus(self.terminal)
                     while int(ret4['status'][0]['up']) != 1 and count < 10:
@@ -198,7 +198,7 @@ class Frame(wx.Frame):
                         self.resultText += "done\n"
                     else:
                         self.resultText += "failed\n"
-            time.sleep(2.0)
+            time.sleep(20)
 
         def stop(self):
             self.running = False

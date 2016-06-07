@@ -7,8 +7,8 @@ LOG_PATH = os.getcwd() + os.sep + "temp_log" + os.sep
 LOG_NAME = str(int(time.time())) + "_temp.log"
 
 
-PPPOE_ACCOUNT = ''
-PPPOE_PASSWORD = ''
+PPPOE_ACCOUNT = 'pppoe'
+PPPOE_PASSWORD = 'pppoe'
 
 WIFI_SSID = 'coconuts_test_tools'
 WIFI_PASSWORD = '12345678'
